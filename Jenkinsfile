@@ -1,20 +1,11 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE_NAME = "grocamador/cicd-demo"
+        DOCKER_IMAGE_NAME = "grocamador/emealab-cicd"
         DOCKERHUB_CREDENTIALS= credentials('dockerhubcredentials')
         }
     
 stages {
-
-/*        stage('Test') {
-            steps {
-                echo 'Running build automation'
-                sh './gradlew build --no-daemon'
-               archiveArtifacts artifacts: 'dist/trainSchedule.zip'
-            }
-        }
-*/
 
 
     stage('Build Docker Image') {
@@ -64,7 +55,6 @@ stages {
         }
             
 
-
     stage('Deploy to stage') {
         when {
             branch 'master'
@@ -72,8 +62,8 @@ stages {
             steps {
             echo "Deploying to Staging"
             sh ("""     
-                  kubectl delete -f train-schedule-kube-stage.yml
-                  kubectl apply -f train-schedule-kube-stage.yml
+                  kubectl delete -f account-portal-stage.yml
+                  kubectl apply -f account-portal-stage.yml
                 """)
  
             }
@@ -87,9 +77,8 @@ stages {
                 input 'Deploy to Production?'
                 milestone(1)   
               sh ("""                
-                  echo \$KUBECONFIG
-                  kubectl delete -f train-schedule-kube.yml
-                  kubectl apply -f train-schedule-kube.yml
+                  kubectl delete -f account-portal.yml
+                  kubectl apply -f account-portal.yml
                 """)
                 
              }
