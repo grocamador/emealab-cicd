@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
       - name: account-portal
-        image: grocamador/cicd-demo:latest
+        image: grocamador/emealab-cicd
         imagePullPolicy: "Always"
         ports:
         - containerPort: 8080
