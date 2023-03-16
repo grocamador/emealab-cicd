@@ -10,7 +10,7 @@ stages {
 
     stage('Build Docker Image') {
             when {
-                branch 'master'
+                branch 'main'
             }
         steps {
                 echo 'Building docker image'
@@ -21,7 +21,7 @@ stages {
  
       stage('Scanning Image with Sysdig') {
 	     when {
-                branch 'master'
+                branch 'main'
             }
         steps {
             
@@ -39,7 +39,7 @@ stages {
 
     stage('Push Docker Image') {
         when {
-            branch 'master'
+            branch 'main'
         }
         steps {
 
@@ -57,7 +57,7 @@ stages {
         
        stage("Deploy to Production"){
         when {
-                branch 'master'
+                branch 'main'
             }
              steps {              
                 input 'Deploy to Production?'
