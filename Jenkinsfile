@@ -53,21 +53,7 @@ stages {
                 sh "docker push ${DOCKER_IMAGE_NAME}:latest"
             }
         }
-            
-
-    stage('Deploy to stage') {
-        when {
-            branch 'master'
-        }
-            steps {
-            echo "Deploying to Staging"
-            sh ("""     
-                  kubectl delete -f account-portal-stage.yml
-                  kubectl apply -f account-portal-stage.yml
-                """)
- 
-            }
-        }
+        
         
        stage("Deploy to Production"){
         when {
@@ -77,8 +63,8 @@ stages {
                 input 'Deploy to Production?'
                 milestone(1)   
               sh ("""                
-                  kubectl delete -f account-portal.yml
-                  kubectl apply -f account-portal.yml
+                  kubectl delete -f account-portal.yaml
+                  kubectl apply -f account-portal.yaml
                 """)
                 
              }

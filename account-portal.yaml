@@ -1,0 +1,41 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: account-portal-service
+  namespace: account-portal-prod
+spec:
+  type: NodePort
+  selector:
+    app: account-portal
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30080
+
+
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: account-portal-prod
+  name: account-portal-deployment
+  labels:
+    app: account-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: account-portal
+  template:
+    metadata:
+      labels:
+        app: account-portal
+    spec:
+      containers:
+      - name: account-portal
+        image: grocamador/cicd-demo:latest
+        imagePullPolicy: "Always"
+        ports:
+        - containerPort: 8080
