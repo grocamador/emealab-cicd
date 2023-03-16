@@ -60,10 +60,9 @@ stages {
                 branch 'main'
             }
              steps {              
-                input 'Deploy to Production?'
-                milestone(1)   
+
               sh ("""                
-                  kubectl delete -f account-portal.yaml
+                  kubectl delete -f account-portal.yaml                 
                   kubectl apply -f account-portal.yaml
                 """)
                 
