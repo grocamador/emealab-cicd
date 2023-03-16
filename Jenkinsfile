@@ -7,7 +7,15 @@ pipeline {
     
 stages {
 
-
+    stage('Login ECR') {
+            when {
+                branch 'main'
+            }
+        steps {
+                echo 'Loging to ECR'
+                sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 059797578166.dkr.ecr.eu-central-1.amazonaws.com"
+            }
+        }
     stage('Build Docker Image') {
             when {
                 branch 'main'
