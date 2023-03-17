@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_REGISTRY_NAME = "emealab-cicd:latest 059797578166.dkr.ecr.eu-central-1.amazonaws.com"
-        DOCKER_IMAGE_NAME = "grocamador/emealab-cicd"
+        DOCKER_IMAGE_NAME = "emealab-cicd"
         DOCKERHUB_CREDENTIALS= credentials('dockerhubcredentials')
         }
     
