@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_REGISTRY_NAME = "059797578166.dkr.ecr.eu-central-1.amazonaws.com"
+        DOCKER_REGISTRY_NAME = "966508915346.dkr.ecr.us-east-1.amazonaws.com"
         DOCKER_IMAGE_NAME = "emealab-cicd"
         DOCKERHUB_CREDENTIALS= credentials('dockerhubcredentials')
 
@@ -9,28 +9,12 @@ pipeline {
     
 stages {
 
-    stage('Login ECR') {
-            when {
-                branch 'main'
-            }
-            environment {
-        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-            }
-        steps {
-                echo 'checking vars'
-                sh "env"
-                echo 'Login to ECR'
-                sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 966508915346.dkr.ecr.us-east-1.amazonaws.com"
-            }
-        }
+ 
     stage('Build Docker Image') {
             when {
                 branch 'main'
             }
         steps {
-                 echo 'checking vars'
-                sh "env"               
                 echo 'Building docker image'
                 sh "docker build -t ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} ."
             }
@@ -59,10 +43,14 @@ stages {
         when {
             branch 'main'
         }
+        environment {
+        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+            }        
         steps {
 
                 echo "Login on ECR"
-                sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 059797578166.dkr.ecr.eu-central-1.amazonaws.com"       		
+                sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 966508915346.dkr.ecr.us-east-1.amazonaws.com"       		
 	            echo 'Login Completed' 
                 echo "Pushing docker image to ECR with current build tag"
                 sh " docker tag ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} ${DOCKER_REGISTRY_NAME}/${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}"
@@ -80,7 +68,8 @@ stages {
             }
              steps {              
 
-              sh ("""                
+              sh ("""
+                aws sts get-caller-identity                
                   kubectl delete -f account-portal.yaml                 
                   kubectl apply -f account-portal.yaml
                 """)
