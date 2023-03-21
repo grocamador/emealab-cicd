@@ -69,7 +69,6 @@ stages {
              steps {              
 
               sh ("""
-                aws sts get-caller-identity                
                   kubectl delete -f account-portal.yaml                 
                   kubectl apply -f account-portal.yaml
                 """)
