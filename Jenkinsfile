@@ -4,6 +4,7 @@ pipeline {
         DOCKER_REGISTRY_NAME = "059797578166.dkr.ecr.eu-central-1.amazonaws.com"
         DOCKER_IMAGE_NAME = "emealab-cicd"
         DOCKERHUB_CREDENTIALS= credentials('dockerhubcredentials')
+
         }
     
 stages {
@@ -12,9 +13,15 @@ stages {
             when {
                 branch 'main'
             }
+            environment {
+        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+            }
         steps {
-                echo 'Loging to ECR'
-                sh "aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 059797578166.dkr.ecr.eu-central-1.amazonaws.com"
+                echo 'checking vars'
+                sh "env"
+                echo 'Login to ECR'
+                sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 966508915346.dkr.ecr.us-east-1.amazonaws.com"
             }
         }
     stage('Build Docker Image') {
@@ -22,6 +29,8 @@ stages {
                 branch 'main'
             }
         steps {
+                 echo 'checking vars'
+                sh "env"               
                 echo 'Building docker image'
                 sh "docker build -t ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} ."
             }
