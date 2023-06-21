@@ -34,7 +34,7 @@ spec:
         app: account-portal
     spec:
       containers:
-      - name: account-portal
+      - name: emealab-cicd
         image: 059797578166.dkr.ecr.eu-central-1.amazonaws.com/emealab-cicd:latest
         imagePullPolicy: "Always"
         ports:
