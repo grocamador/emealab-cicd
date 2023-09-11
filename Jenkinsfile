@@ -69,7 +69,6 @@ stages {
              steps {              
 
               sh ("""
-                  kubectl delete -f account-portal.yaml                 
                   kubectl apply -f account-portal.yaml
                 """)
                 
